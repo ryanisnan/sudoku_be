@@ -7,6 +7,12 @@ services:
       - .:/app
     ports:
       - "8000:8000"
+    environment:
+      - DB_HOST=sudoku_db
+      - DB_PORT=5432
+      - DB_USER=sudoku_be
+      - DB_PASSWORD=s0_s3cr3t
+      - DB_NAME=sudoku_be
 
   sudoku_db:
     container_name: sudoku_db
