@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from sudoku.api.v1.game import GameAPIViewV1
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/games', GameAPIViewV1.as_view())
 ]
