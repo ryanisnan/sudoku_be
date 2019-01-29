@@ -7,3 +7,14 @@ services:
       - .:/app
     ports:
       - "8000:8000"
+
+  sudoku_db:
+    container_name: sudoku_db
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=sudoku_be
+      - POSTGRES_USER=sudoku_be
+      - POSTGRES_PASSWORD=s0_s3cr3t
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - .pgdata:/var/lib/postgresql/data/pgdata
