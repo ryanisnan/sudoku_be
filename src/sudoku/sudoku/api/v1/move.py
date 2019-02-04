@@ -5,6 +5,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from ...utils import get_neighbors
 
 
 def tile_coordinates(value):
@@ -57,7 +58,10 @@ class MoveAPIListViewV1(APIView):
             if not game.is_tile_editable(serializer.validated_data.get('x'), serializer.validated_data.get('y')):
                 return Response({'detail': 'The given coordinate is not editable.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # TODO: Ensure that value satisfies the game rules
+            # Ensure the tile doesn't conflict with neighbors
+            rendered_game = game.render_game()
+            if serializer.validated_data['value'] in get_neighbors(serializer.validated_data.get('y'), serializer.validated_data.get('x'), rendered_game):
+                return Response({'detail': 'Bad move! Conflict with our neighbors.'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Determine the last move dynamically
             previous_move = Move.objects.filter(game=request.data.get('game')).order_by('-id').first()
