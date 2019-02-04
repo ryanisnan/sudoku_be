@@ -13,6 +13,8 @@ services:
       - DB_USER=sudoku_be
       - DB_PASSWORD=s0_s3cr3t
       - DB_NAME=sudoku_be
+    networks:
+      - sudoku
 
   sudoku_db:
     container_name: sudoku_db
@@ -24,3 +26,8 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - .pgdata:/var/lib/postgresql/data/pgdata
+    networks:
+      - sudoku
+
+networks:
+  sudoku:
