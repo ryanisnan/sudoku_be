@@ -51,4 +51,19 @@ class GameAPIDetailViewV1(APIView):
             output += '-' + '---' * 9 + '---\n'
             return HttpResponse(output, status=status.HTTP_200_OK, content_type='text/plain')
 
-        return Response(game.tiles, status=status.HTTP_200_OK)
+        return Response(rendered_game, status=status.HTTP_200_OK)
+
+    def post(self, request, pk, format=None):
+        try:
+            game = Game.objects.get(pk=pk)
+        except Game.DoesNotExist:
+            raise Http404
+
+        if 'reset' not in request.GET:
+            return Response({'detail': 'The query parameter `reset` is required for this view.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        game.user_input = [[None for j in range(0, 9)] for i in range(0, 9)]
+        game.save()
+
+        rendered_game = game.render_game()
+        return Response(rendered_game, status=status.HTTP_200_OK)
