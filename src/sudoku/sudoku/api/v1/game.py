@@ -32,21 +32,7 @@ class GameAPIDetailViewV1(APIView):
             ]
         }
         '''
-        rendered_game = game.tiles
-
-        # Hide masked tiles
-        # TODO: Using a lib like numpy to do matrix masking would be more efficient.
-        for i, masked_row in enumerate(game.masked_tiles):
-            for j, masked_tile in enumerate(masked_row):
-                if masked_tile:
-                    rendered_game[i][j] = None
-
-        # Overlay user input
-        for i, input_row in enumerate(game.user_input):
-            for j, input_tile in enumerate(input_row):
-                is_editable = bool(rendered_game[i][j] is None)
-                if is_editable:
-                    rendered_game[i][j] = input_tile
+        rendered_game = game.render_game()
 
         if request.GET.get('pretty', False):
             output = '-' + '---' * 9 + '---\n'

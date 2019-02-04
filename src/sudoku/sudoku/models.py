@@ -33,6 +33,25 @@ class Game(models.Model):
         size=9,
     )
 
+    def render_game(self):
+        rendered_game = self.tiles
+
+        # Hide masked tiles
+        # TODO: Using a lib like numpy to do matrix masking would be more efficient.
+        for i, masked_row in enumerate(self.masked_tiles):
+            for j, masked_tile in enumerate(masked_row):
+                if masked_tile:
+                    rendered_game[i][j] = None
+
+        # Overlay user input
+        for i, input_row in enumerate(self.user_input):
+            for j, input_tile in enumerate(input_row):
+                is_editable = bool(rendered_game[i][j] is None)
+                if is_editable:
+                    rendered_game[i][j] = input_tile
+
+        return rendered_game
+
 
 class Move(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
