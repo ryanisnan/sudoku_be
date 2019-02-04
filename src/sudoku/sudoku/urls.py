@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from sudoku.api.v1.game import GameAPIViewV1
+from sudoku.api.v1.move import MoveAPIListViewV1
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/games', GameAPIViewV1.as_view())
+    path('api/v1/games', GameAPIViewV1.as_view()),
+    path('api/v1/moves', MoveAPIListViewV1.as_view()),
 ]

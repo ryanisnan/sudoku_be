@@ -14,7 +14,7 @@ class MoveSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'previous_move',)
 
 
-class MoveList(APIView):
+class MoveAPIListViewV1(APIView):
     def get(self, request, format=None):
         game_id = request.GET.get('game', None)
         try:
