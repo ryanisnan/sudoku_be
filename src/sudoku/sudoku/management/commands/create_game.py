@@ -30,7 +30,7 @@ class Command(BaseCommand):
             [1, 1, 1, 0, 1, 0, 1, 0, 1],
         ]
 
-        user_input = []
+        user_input = [[None for j in range(0, 9)] for i in range(0, 9)]
 
-        game = Game.objects.create(tiles=tiles, masked_tiles=masked_tiles, user_input=[], user_id=1)
+        game = Game.objects.create(tiles=tiles, masked_tiles=masked_tiles, user_input=user_input, user_id=1)
         print('Created game %d' % game.id)
