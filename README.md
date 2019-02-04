@@ -28,25 +28,25 @@ docker exec -it sudoku_be python manage.py create_game
 
 This endpoint prints to users the status of a game, specified by the pk in the URL. It allows for JSON printing of the game in its current state, resetting of the game board, and "pretty" printing the sudoku board.
 
-#### Method: `GET`####
-#### Query Parameters####
+#### Method: `GET` ####
+#### Query Parameters ####
 
 - `pretty=1` - Will return a `text/plain` response with a printout of the game board in its current state. Useful for debugging.
 
-#### Request Body####
+#### Request Body ####
 None
 
-#### Response:####
+#### Response: ####
 - `200` - Here's your game
 - `404` - Game couldn't be found.
 - `500` - I broke something.
 
-##### Example regular output#####
+##### Example regular output #####
 ```
 [[null,2,null,6,null,8,null,null,null],[5,8,null,null,null,9,7,null,null],[null,null,null,null,4,null,null,null,null],[3,7,null,null,null,null,5,null,null],[6,null,null,null,null,null,null,null,4],[null,null,8,null,null,null,null,1,3],[null,null,null,null,2,null,null,null,null],[null,null,9,8,null,null,null,3,6],[null,null,null,3,null,6,null,9,null]]
 ```
 
-##### Example pretty output#####
+##### Example pretty output #####
 ```
 -------------------------------
 | 1  2  3 | 6     8 | 1  1  2 |
@@ -99,7 +99,7 @@ None
 #### Query Parameters ####
 None
 
-#### Request Body:####
+#### Request Body: ####
 
 ```
 {
