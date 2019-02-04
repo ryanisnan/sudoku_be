@@ -34,12 +34,17 @@ class GameAPIDetailViewV1(APIView):
         '''
         rendered_game = game.tiles
 
+        for i, masked_row in enumerate(game.masked_tiles):
+            for j, masked_tile in enumerate(masked_row):
+                if masked_tile:
+                    rendered_game[i][j] = None
+
         if request.GET.get('pretty', False):
             output = '-' + '---' * 9 + '---\n'
             for i, row in enumerate(rendered_game):
                 output += '|'
                 for j, tile in enumerate(row):
-                    output += ' %s ' % tile if tile >= 0 else ' '
+                    output += ' %s ' % tile if tile is not None and tile >= 0 else '   '
                     if j in [2, 5]:
                         output += '|'
                 output += '|\n'
