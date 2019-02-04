@@ -23,7 +23,7 @@ def sudoku_value(value):
 class MoveSerializer(serializers.ModelSerializer):
     x = serializers.IntegerField(validators=[tile_coordinates])
     y = serializers.IntegerField(validators=[tile_coordinates])
-    value = serializers.IntegerField(validators=[sudoku_value])
+    value = serializers.IntegerField(validators=[sudoku_value], allow_null=True)
 
     class Meta:
         model = Move
@@ -64,7 +64,7 @@ class MoveAPIListViewV1(APIView):
             serializer.save(previous_move=previous_move)
 
             # Update the game state
-            game.user_input[serializer.validated_data['x']][serializer.validated_data['y']] = serializer.validated_data['value']
+            game.user_input[serializer.validated_data['y']][serializer.validated_data['x']] = serializer.validated_data['value']
             game.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -21,5 +21,5 @@ from sudoku.api.v1.move import MoveAPIListViewV1
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/games/<int:pk>/', GameAPIDetailViewV1.as_view()),
-    path('api/v1/moves', MoveAPIListViewV1.as_view()),
+    path('api/v1/moves/', MoveAPIListViewV1.as_view()),
 ]
