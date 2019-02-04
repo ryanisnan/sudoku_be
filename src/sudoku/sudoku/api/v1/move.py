@@ -34,7 +34,9 @@ class MoveAPIListViewV1(APIView):
     def post(self, request, format=None):
         serializer = MoveSerializer(data=request.data)
         if serializer.is_valid():
-            # TODO: Ensure that the given X/Y isn't a given tile (e.g. not editable)
+            game = serializer.validated_data.get('game')
+            if not game.is_tile_editable(serializer.validated_data.get('x'), serializer.validated_data.get('y')):
+                return Response({'detail': 'The given coordinate is not editable.'}, status=status.HTTP_400_BAD_REQUEST)
 
             # TODO: Ensure that value satisfies the game rules
 
@@ -43,6 +45,7 @@ class MoveAPIListViewV1(APIView):
             serializer.save(previous_move=previous_move)
 
             # TODO: Update the game state
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
