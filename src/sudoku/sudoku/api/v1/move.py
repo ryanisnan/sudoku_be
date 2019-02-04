@@ -34,9 +34,15 @@ class MoveAPIListViewV1(APIView):
     def post(self, request, format=None):
         serializer = MoveSerializer(data=request.data)
         if serializer.is_valid():
+            # TODO: Ensure that the given X/Y isn't a given tile (e.g. not editable)
+
+            # TODO: Ensure that value satisfies the game rules
+
             # Determine the last move dynamically
             previous_move = Move.objects.filter(game=request.data.get('game')).order_by('-id').first()
             serializer.save(previous_move=previous_move)
+
+            # TODO: Update the game state
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
