@@ -30,3 +30,13 @@ class MoveAPIListViewV1(APIView):
         moves = Move.objects.filter(game=game)
         serializer = MoveSerializer(moves, many=True)
         return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = MoveSerializer(data=request.data)
+        if serializer.is_valid():
+            # Determine the last move dynamically
+            previous_move = Move.objects.filter(game=request.data.get('game')).order_by('-id').first()
+            serializer.save(previous_move=previous_move)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
