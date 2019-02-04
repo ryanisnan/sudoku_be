@@ -1,14 +1,34 @@
-from django.http import JsonResponse
-from django.views.generic import View
 from ...models import Game
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
-class GameAPIViewV1(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return JsonResponse({'message': 'You must be authenticated to list games.'}, status=401)
+class GameAPIDetailViewV1(APIView):
+    def get(self, request, pk, format=None):
 
-        games = Game.objects.filter(user=request.user)
-        games_serialized = [x.to_dict() for x in games]
+        try:
+            game = Game.objects.get(pk=pk)
+        except Game.DoesNotExist:
+            raise Http404
 
-        return JsonResponse({'games': games_serialized}, status=200)
+        '''
+        Response:
+        {
+            tiles: [
+                [], // Row 1
+                [], // Row 2
+                [], // Row 3
+
+                [], // Row 4
+                [], // Row 5
+                [], // Row 6
+
+                [], // Row 7
+                [], // Row 8
+                [], // Row 9
+            ]
+        }
+        '''
+        return Response(game.tiles, status=status.HTTP_200_OK)
