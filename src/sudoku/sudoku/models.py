@@ -56,7 +56,7 @@ class Game(models.Model):
 
     def is_tile_editable(self, x, y):
         # A tile is considered editable if it has been masked
-        return bool(self.masked_tiles[x][y])
+        return bool(self.masked_tiles[y][x])
 
 
 class Move(models.Model):
