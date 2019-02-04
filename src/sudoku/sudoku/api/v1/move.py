@@ -7,7 +7,24 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 
+def tile_coordinates(value):
+    valid_values = range(0, 9)
+    if value not in valid_values:
+        raise serializers.ValidationError('Not a valid value.')
+
+
+def sudoku_value(value):
+    valid_values = [None]
+    valid_values.extend(range(1, 10))
+    if value not in valid_values:
+        raise serializers.ValidationError('Not a valid value.')
+
+
 class MoveSerializer(serializers.ModelSerializer):
+    x = serializers.IntegerField(validators=[tile_coordinates])
+    y = serializers.IntegerField(validators=[tile_coordinates])
+    value = serializers.IntegerField(validators=[sudoku_value])
+
     class Meta:
         model = Move
         fields = ('id', 'game', 'previous_move', 'x', 'y', 'value')
@@ -35,6 +52,8 @@ class MoveAPIListViewV1(APIView):
         serializer = MoveSerializer(data=request.data)
         if serializer.is_valid():
             game = serializer.validated_data.get('game')
+
+            # Ensure the tile can be edited
             if not game.is_tile_editable(serializer.validated_data.get('x'), serializer.validated_data.get('y')):
                 return Response({'detail': 'The given coordinate is not editable.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -44,7 +63,9 @@ class MoveAPIListViewV1(APIView):
             previous_move = Move.objects.filter(game=request.data.get('game')).order_by('-id').first()
             serializer.save(previous_move=previous_move)
 
-            # TODO: Update the game state
+            # Update the game state
+            game.user_input[serializer.validated_data['x']][serializer.validated_data['y']] = serializer.validated_data['value']
+            game.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
