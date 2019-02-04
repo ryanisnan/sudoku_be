@@ -32,3 +32,11 @@ class Game(models.Model):
         ),
         size=9,
     )
+
+
+class Move(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    previous_move = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    x = models.PositiveSmallIntegerField(help_text='The X coordinate on the board.')
+    y = models.PositiveSmallIntegerField(help_text='The Y coordinate on the board.')
+    value = models.PositiveSmallIntegerField(blank=True, null=True, help_text='The value the move changes the coordinate to.')
