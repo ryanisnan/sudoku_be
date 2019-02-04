@@ -34,6 +34,8 @@ class Game(models.Model):
     )
 
     def render_game(self):
+        # Produce a 2-D array of the board, masking the hidden tile values, and
+        # filling in what the user has entered.
         rendered_game = self.tiles
 
         # Hide masked tiles
@@ -51,6 +53,10 @@ class Game(models.Model):
                     rendered_game[i][j] = input_tile
 
         return rendered_game
+
+    def is_tile_editable(self, x, y):
+        # A tile is considered editable if it has been masked
+        return bool(self.masked_tiles[x][y])
 
 
 class Move(models.Model):
